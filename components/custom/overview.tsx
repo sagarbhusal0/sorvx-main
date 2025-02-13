@@ -15,13 +15,16 @@ export const Overview = () => {
     >
       <div className="border-none bg-muted/50 rounded-2xl p-6 flex flex-col gap-4 text-zinc-500 text-sm dark:text-zinc-400 dark:border-zinc-700">
         <p className="flex flex-row justify-center gap-4 items-center text-zinc-900 dark:text-zinc-50">
-          <VercelIcon />
-          <span>+</span>
-          <MessageIcon />
+        <Image
+              src="/images/ai.png"
+              height={20}
+              width={20}
+              alt="sorvx logo"
+            />
         </p>
         <p>
-          This is an open source Chatbot template powered by the Google Gemini
-          model built with Next.js and the AI SDK by Vercel. It uses the{" "}
+          This is an Chatbot Named Sorvx Ai powered by the Sorvx - s2 -70B 
+          model built By Sorvx Labs . It uses the{" "}
           <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
             streamText
           </code>{" "}
@@ -33,13 +36,13 @@ export const Overview = () => {
         </p>
         <p>
           {" "}
-          You can learn more about the AI SDK by visiting the{" "}
+          This Ai ChatBot is Developed and Maintain By {" "}
           <Link
             className="text-blue-500 dark:text-blue-400"
-            href="https://sdk.vercel.ai/docs"
+            href="https://sorvx.com"
             target="_blank"
           >
-            Docs
+            Sorvx Labs
           </Link>
           .
         </p>
