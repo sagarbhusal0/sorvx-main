@@ -21,14 +21,14 @@ import { Textarea } from "../ui/textarea";
 
 const suggestedActions = [
   {
-    title: "Help me book a flight",
-    label: "from San Francisco to London",
-    action: "Help me book a flight from San Francisco to London",
+    title: "What is The most popular Coding ",
+    label: "Language For Making Apps?",
+    action: "What is the most popular coding language for making apps?",
   },
   {
-    title: "What is the status",
-    label: "of flight BA142 flying tmrw?",
-    action: "What is the status of flight BA142 flying tmrw?",
+    title: "What is pros of Ai",
+    label: "in Our Life?",
+    action: "What is the pros of ai in our daily life?",
   },
 ];
 
