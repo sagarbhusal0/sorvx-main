@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Chat } from "@/db/schema";
-import { User } from "next-auth";
 import { useParams, usePathname } from "next/navigation";
+import { User } from "next-auth";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 
+import { Chat } from "@/db/schema";
 import { fetcher } from "@/lib/utils";
 
 import { DeleteIcon, HistoryIcon, PlusIcon } from "./icons";
-import { Button } from "../ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import { Button } from "../ui/button";
 import {
   Sheet,
   SheetContent,
@@ -33,7 +33,6 @@ import {
 export const History = ({ user }: { user: User | undefined }) => {
   const { id } = useParams();
   const pathname = usePathname();
-  const [isHistoryVisible, setIsHistoryVisible] = useState(false);
   const {
     data: history,
     isLoading,
@@ -61,6 +60,7 @@ export const History = ({ user }: { user: User | undefined }) => {
           if (history) {
             return history.filter((h) => h.id !== id);
           }
+          return history;
         });
         return "Chat deleted successfully";
       },
@@ -98,16 +98,10 @@ export const History = ({ user }: { user: User | undefined }) => {
                     <span>New Chat</span>
                   </Button>
                 </Link>
-                {history.map((chat) => (
-                  <div
-                    key={chat.id}
-                    className="group history-item"
-                  >
+                {(history || []).map((chat) => (
+                  <div key={chat.id} className="group history-item">
                     <Link href={`/chat/${chat.id}`} className="flex-1">
-                      <Button
-                        variant="ghost"
-                        className="history-button w-full"
-                      >
+                      <Button variant="ghost" className="history-button w-full">
                         {(chat.messages[0]?.content as string)?.slice(0, 30) ||
                           "New Chat"}
                       </Button>
@@ -121,6 +115,7 @@ export const History = ({ user }: { user: User | undefined }) => {
                         setShowDeleteDialog(true);
                       }}
                     >
+                      {/* Either change to "size-4" or disable the rule */}
                       <DeleteIcon className="h-4 w-4" />
                     </Button>
                   </div>
