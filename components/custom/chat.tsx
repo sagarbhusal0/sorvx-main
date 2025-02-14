@@ -36,54 +36,54 @@ export function Chat({
   return (
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 w-full bg-white shadow-md p-4 z-10">
-        <h1 className="text-lg font-bold">Sorvx AI Chat</h1>
+      <header className="fixed top-0 left-0 w-full bg-white shadow-md p-2 sm:p-4 z-20">
+        <h1 className="text-base sm:text-lg font-bold">Sorvx AI</h1>
       </header>
 
-      {/* Main Container with top padding so messages don't overlap the header */}
-      <main className="pt-24 pb-6">
-        <div className="flex flex-row justify-center">
-          <div className="flex flex-col justify-between items-center gap-4 w-full">
+      {/* Main Container */}
+      <main className="pt-20 sm:pt-24 pb-4">
+        <div className="flex flex-col items-center px-2 sm:px-4">
+          {/* Messages Container */}
+          <div
+            ref={messagesContainerRef}
+            className="flex flex-col gap-2 sm:gap-4 w-full max-w-md h-[70vh] overflow-y-auto"
+          >
+            {messages.length === 0 && <Overview />}
+
+            {messages.map((message) => (
+              <PreviewMessage
+                key={message.id}
+                chatId={id}
+                role={message.role}
+                content={message.content}
+                attachments={message.experimental_attachments}
+                toolInvocations={message.toolInvocations}
+              />
+            ))}
+
             <div
-              ref={messagesContainerRef}
-              className="flex flex-col gap-4 h-dvh w-dvw items-center overflow-y-scroll"
-            >
-              {messages.length === 0 && <Overview />}
-
-              {messages.map((message) => (
-                <PreviewMessage
-                  key={message.id}
-                  chatId={id}
-                  role={message.role}
-                  content={message.content}
-                  attachments={message.experimental_attachments}
-                  toolInvocations={message.toolInvocations}
-                />
-              ))}
-
-              <div
-                ref={messagesEndRef}
-                className="shrink-0 min-w-[24px] min-h-[24px]"
-              />
-            </div>
-
-            <form
-              className="flex flex-row gap-2 relative items-end w-full md:max-w-[500px] max-w-[calc(100dvw-32px)] px-4 md:px-0"
-              onSubmit={handleSubmit}
-            >
-              <MultimodalInput
-                input={input}
-                setInput={setInput}
-                handleSubmit={handleSubmit}
-                isLoading={isLoading}
-                stop={stop}
-                attachments={attachments}
-                setAttachments={setAttachments}
-                messages={messages}
-                append={append}
-              />
-            </form>
+              ref={messagesEndRef}
+              className="shrink-0 min-w-[24px] min-h-[24px]"
+            />
           </div>
+
+          {/* Input Form */}
+          <form
+            className="flex flex-row gap-2 items-end w-full max-w-md mt-4"
+            onSubmit={handleSubmit}
+          >
+            <MultimodalInput
+              input={input}
+              setInput={setInput}
+              handleSubmit={handleSubmit}
+              isLoading={isLoading}
+              stop={stop}
+              attachments={attachments}
+              setAttachments={setAttachments}
+              messages={messages}
+              append={append}
+            />
+          </form>
         </div>
       </main>
     </div>
