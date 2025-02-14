@@ -17,21 +17,23 @@ import { ListFlights } from "../flights/list-flights";
 import { SelectSeats } from "../flights/select-seats";
 import { VerifyPayment } from "../flights/verify-payment";
 
+interface MessageProps {
+  chatId: string;
+  role: string;
+  content: string | ReactNode;
+  toolInvocations?: Array<ToolInvocation>;
+  attachments?: Array<Attachment>;
+  isFirstMessage?: boolean;
+}
+
 export const Message = ({
   chatId,
   role,
   content,
   toolInvocations,
   attachments,
-  isFirstMessage, // New prop to check if it's the first message
-}: {
-  chatId: string;
-  role: string;
-  content: string | ReactNode;
-  toolInvocations: Array<ToolInvocation> | undefined;
-  attachments?: Array<Attachment>;
-  isFirstMessage?: boolean; // Optional prop
-}) => {
+  isFirstMessage = false,
+}: MessageProps) => {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
 
@@ -56,12 +58,7 @@ export const Message = ({
         {isUser ? (
           <UserIcon />
         ) : (
-          <Image
-            src="/images/ai.png"
-            height={20}
-            width={20}
-            alt="sorvx logo"
-          />
+          <Image src="/images/ai.png" height={20} width={20} alt="sorvx logo" />
         )}
       </div>
 
@@ -73,7 +70,7 @@ export const Message = ({
             : "bg-black text-white border border-gray-700"
         }`}
       >
-        {/* Copy button (only for chatbot messages) */}
+        {/* Copy button for chatbot messages */}
         {!isUser && (
           <button
             onClick={handleCopy}
@@ -84,18 +81,19 @@ export const Message = ({
         )}
 
         {/* Message content */}
-        {content && typeof content === "string" && (
+        {content && typeof content === "string" ? (
           <div>
             <Markdown>{content}</Markdown>
           </div>
+        ) : (
+          <div>{content}</div>
         )}
 
-        {/* Tool Invocations */}
-        {toolInvocations && (
+        {/* Tool invocations */}
+        {toolInvocations && toolInvocations.length > 0 && (
           <div className="flex flex-col gap-4">
             {toolInvocations.map((toolInvocation) => {
               const { toolName, toolCallId, state } = toolInvocation;
-
               if (state === "result") {
                 const { result } = toolInvocation;
                 return (
@@ -149,7 +147,7 @@ export const Message = ({
         )}
 
         {/* Attachments */}
-        {attachments && (
+        {attachments && attachments.length > 0 && (
           <div className="flex flex-row gap-2">
             {attachments.map((attachment) => (
               <PreviewAttachment key={attachment.url} attachment={attachment} />
