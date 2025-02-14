@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
-import { UserIcon } from "./icons"; // UserIcon remains for user messages.
+import { UserIcon } from "./icons"; // UserIcon for user messages
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
@@ -31,10 +31,19 @@ export const Message = ({
   attachments?: Array<Attachment>;
 }) => {
   const isUser = role === "user";
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (typeof content === "string") {
+      navigator.clipboard.writeText(content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <motion.div
-      className={`flex items-start gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
+      className={`flex items-start gap-4 px-4 w-full md:w-[500px] md:px-0 pt-4 mb-4 ${
         isUser ? "justify-end flex-row-reverse" : "justify-start"
       }`}
       initial={{ y: 5, opacity: 0 }}
@@ -56,18 +65,30 @@ export const Message = ({
 
       {/* Message container */}
       <div
-        className={`flex flex-col gap-2 w-full p-4 rounded-lg transition-transform duration-200 transform hover:scale-[1.01] shadow-sm ${
+        className={`relative flex flex-col gap-4 w-full p-4 rounded-lg transition-transform duration-200 transform hover:scale-105 shadow-sm ${
           isUser
             ? "bg-white text-zinc-800 border border-gray-200"
             : "bg-black text-white border border-gray-700"
         }`}
       >
+        {/* Copy button (only for chatbot messages) */}
+        {!isUser && (
+          <button
+            onClick={handleCopy}
+            className="absolute top-2 right-2 text-xs text-gray-300 hover:text-gray-100 focus:outline-none"
+          >
+            {copied ? "Copied!" : "Copy"}
+          </button>
+        )}
+
+        {/* Message content */}
         {content && typeof content === "string" && (
-          <div className="flex flex-col gap-4">
+          <div>
             <Markdown>{content}</Markdown>
           </div>
         )}
 
+        {/* Tool Invocations */}
         {toolInvocations && (
           <div className="flex flex-col gap-4">
             {toolInvocations.map((toolInvocation) => {
@@ -75,7 +96,6 @@ export const Message = ({
 
               if (state === "result") {
                 const { result } = toolInvocation;
-
                 return (
                   <div key={toolCallId}>
                     {toolName === "getWeather" ? (
@@ -126,6 +146,7 @@ export const Message = ({
           </div>
         )}
 
+        {/* Attachments */}
         {attachments && (
           <div className="flex flex-row gap-2">
             {attachments.map((attachment) => (
