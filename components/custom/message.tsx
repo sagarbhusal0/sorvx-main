@@ -5,7 +5,7 @@ import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode, useState } from "react";
 
-import { UserIcon } from "./icons"; // UserIcon for user messages
+import { UserIcon } from "./icons";
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
@@ -23,12 +23,14 @@ export const Message = ({
   content,
   toolInvocations,
   attachments,
+  isFirstMessage, // New prop to check if it's the first message
 }: {
   chatId: string;
   role: string;
   content: string | ReactNode;
   toolInvocations: Array<ToolInvocation> | undefined;
   attachments?: Array<Attachment>;
+  isFirstMessage?: boolean; // Optional prop
 }) => {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
@@ -43,13 +45,13 @@ export const Message = ({
 
   return (
     <motion.div
-      className={`flex items-start gap-4 px-4 w-full md:w-[500px] md:px-0 pt-4 mb-4 ${
-        isUser ? "justify-end flex-row-reverse" : "justify-start"
-      }`}
+      className={`flex items-start gap-4 px-4 w-full md:w-[500px] md:px-0 ${
+        isFirstMessage ? "mt-16" : "mt-4"
+      } ${isUser ? "justify-end flex-row-reverse" : "justify-start"}`}
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
-      {/* Icon */}
+      {/* Avatar */}
       <div className="w-[24px] border rounded-sm p-1 flex justify-center items-center shrink-0 text-zinc-500">
         {isUser ? (
           <UserIcon />
