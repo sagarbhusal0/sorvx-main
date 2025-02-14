@@ -70,7 +70,7 @@ export const Message = ({
             : "bg-black text-white border border-gray-700"
         }`}
       >
-        {/* Copy button for chatbot messages */}
+        {/* Copy button for bot messages */}
         {!isUser && (
           <button
             onClick={handleCopy}
