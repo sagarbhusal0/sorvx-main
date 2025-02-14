@@ -3,7 +3,6 @@ import React, { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-// A custom CodeBlock component styled to look like VS Code's code blocks.
 const CodeBlock = ({
   node,
   inline,
@@ -16,13 +15,48 @@ const CodeBlock = ({
 
   const copyToClipboard = () => {
     const codeText = children.join("");
-    navigator.clipboard.writeText(codeText).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    
+    // Use the Clipboard API if available and in a secure context.
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(codeText).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }).catch((err) => {
+        console.error("Clipboard API failed, falling back to execCommand", err);
+        fallbackCopyText(codeText);
+      });
+    } else {
+      // Fallback for mobile or insecure contexts.
+      fallbackCopyText(codeText);
+    }
   };
 
-  // Render inline code normally.
+  // Fallback copy method using document.execCommand
+  const fallbackCopyText = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        console.error("Fallback: Copy command was unsuccessful");
+      }
+    } catch (err) {
+      console.error("Fallback: Oops, unable to copy", err);
+    }
+    document.body.removeChild(textArea);
+  };
+
   if (inline || !match) {
     return (
       <code
@@ -34,7 +68,6 @@ const CodeBlock = ({
     );
   }
 
-  // For block code, mimic VS Code style.
   return (
     <div className="my-4 border rounded-lg overflow-hidden shadow">
       {/* Header bar mimicking VS Code window controls */}
