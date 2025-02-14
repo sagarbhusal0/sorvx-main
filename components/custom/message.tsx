@@ -44,10 +44,12 @@ export const Message = ({
         {isUser ? <UserIcon /> : <BotIcon />}
       </div>
 
-      {/* Message bubble */}
+      {/* Message container */}
       <div
-        className={`flex flex-col gap-2 w-full p-4 rounded-lg transition-shadow duration-200 hover:shadow-lg ${
-          isUser ? "bg-white text-zinc-800" : "bg-gray-100 text-zinc-800 dark:text-zinc-300"
+        className={`flex flex-col gap-2 w-full p-4 rounded-lg transition-transform duration-200 transform hover:scale-[1.01] shadow-sm ${
+          isUser
+            ? "bg-white text-zinc-800 border border-gray-200"
+            : "bg-black text-white border border-gray-700"
         }`}
       >
         {content && typeof content === "string" && (
