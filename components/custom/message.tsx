@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
-import { BotIcon, UserIcon } from "./icons";
+import { UserIcon } from "./icons"; // UserIcon remains for user messages.
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
@@ -41,7 +42,16 @@ export const Message = ({
     >
       {/* Icon */}
       <div className="w-[24px] border rounded-sm p-1 flex justify-center items-center shrink-0 text-zinc-500">
-        {isUser ? <UserIcon /> : <BotIcon />}
+        {isUser ? (
+          <UserIcon />
+        ) : (
+          <Image
+            src="/images/ai.png"
+            height={20}
+            width={20}
+            alt="sorvx logo"
+          />
+        )}
       </div>
 
       {/* Message container */}
