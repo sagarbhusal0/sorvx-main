@@ -16,9 +16,26 @@
     }
 }
 
+/* Define keyframes for the shake animation */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-10px);
+  }
+  40%, 80% {
+    transform: translateX(10px);
+  }
+}
+
 @layer utilities {
     .text-balance {
         text-wrap: balance;
+    }
+    /* Shake animation utility */
+    .animate-shake {
+        animation: shake 0.5s ease-in-out;
     }
 }
 
