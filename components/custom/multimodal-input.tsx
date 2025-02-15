@@ -23,7 +23,7 @@ const suggestedActions = [
   {
     title: "What is The most popular Coding ",
     label: "Language For Making Apps?",
-    action: "What is the most popular coding language for making apps?",
+    action: "What is the most popular coding languages for making apps?",
   },
   {
     title: "What is pros of Ai",
