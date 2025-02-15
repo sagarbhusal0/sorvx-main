@@ -9,22 +9,28 @@ import { AuthForm } from "@/components/custom/auth-form";
 import { SubmitButton } from "@/components/custom/submit-button";
 
 import { login, LoginActionState } from "../actions";
-import { useActionState } from "@/hooks/use-action-state"; // adjust the import as needed
 
 export default function Page() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [state, setState] = useState<LoginActionState>({ status: "idle" });
   const [shakeButton, setShakeButton] = useState(false);
 
-  const [state, formAction] = useActionState<LoginActionState, FormData>(login, {
-    status: "idle",
-  });
+  // Inline action logic instead of using an external hook
+  const formAction = async (formData: FormData) => {
+    try {
+      const result = await login(formData);
+      setState(result);
+    } catch (error) {
+      console.error("Action failed:", error);
+      // Optionally update state to reflect error status if needed.
+    }
+  };
 
   useEffect(() => {
     if (state.status === "failed" || state.status === "invalid_data") {
       setShakeButton(true);
-      setTimeout(() => setShakeButton(false), 500); // duration should match your CSS animation duration
-
+      setTimeout(() => setShakeButton(false), 500); // duration should match the CSS animation
       if (state.status === "failed") {
         toast.error("Invalid credentials!");
       } else if (state.status === "invalid_data") {
