@@ -16,7 +16,6 @@
     }
 }
 
-/* Define keyframes for the shake animation */
 @keyframes shake {
   0%, 100% {
     transform: translateX(0);
@@ -26,6 +25,12 @@
   }
   40%, 80% {
     transform: translateX(10px);
+  }
+}
+
+@layer utilities {
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
   }
 }
 
