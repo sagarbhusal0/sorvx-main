@@ -1,21 +1,26 @@
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Eye, EyeOff } from "lucide-react"; // Importing icons
+import { Eye, EyeOff } from "lucide-react";
 
-export function AuthForm({
-  action,
-  children,
-  defaultEmail = "",
-}: {
-  action: (event: React.FormEvent<HTMLFormElement>) => void;
+interface AuthFormProps {
+  action: (data: FormData) => void; // expects FormData
   children: React.ReactNode;
   defaultEmail?: string;
-}) {
+}
+
+export function AuthForm({ action, children, defaultEmail = "" }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
+  // Wrap the provided action with an event handler that converts the event to FormData
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    action(formData);
+  };
+
   return (
-    <form action={action} className="flex flex-col gap-4 px-4 sm:px-16">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-4 sm:px-16">
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="email"
@@ -23,7 +28,6 @@ export function AuthForm({
         >
           Email Address
         </Label>
-
         <Input
           id="email"
           name="email"
@@ -35,14 +39,12 @@ export function AuthForm({
           defaultValue={defaultEmail}
           aria-label="Email Address"
         />
-
         <Label
           htmlFor="password"
           className="text-zinc-600 font-normal dark:text-zinc-400"
         >
           Password
         </Label>
-
         <div className="relative">
           <Input
             id="password"
@@ -62,7 +64,6 @@ export function AuthForm({
           </button>
         </div>
       </div>
-
       {children}
     </form>
   );
