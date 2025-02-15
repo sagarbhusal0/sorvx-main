@@ -9,17 +9,23 @@ import { AuthForm } from "@/components/custom/auth-form";
 import { SubmitButton } from "@/components/custom/submit-button";
 
 import { register, RegisterActionState } from "../actions";
-import { useActionState } from "@/hooks/use-action-state"; // adjust the path as needed
 
 export default function Page() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [state, setState] = useState<RegisterActionState>({ status: "idle" });
   const [shakeButton, setShakeButton] = useState(false);
 
-  const [state, formAction] = useActionState<RegisterActionState, FormData>(
-    register,
-    { status: "idle" }
-  );
+  // Inline action logic instead of using an external hook
+  const formAction = async (formData: FormData) => {
+    try {
+      const result = await register(formData);
+      setState(result);
+    } catch (error) {
+      console.error("Action failed:", error);
+      // Optionally update state to reflect error status if needed.
+    }
+  };
 
   useEffect(() => {
     if (
@@ -28,8 +34,7 @@ export default function Page() {
       state.status === "invalid_data"
     ) {
       setShakeButton(true);
-      setTimeout(() => setShakeButton(false), 500); // duration should match your CSS animation
-
+      setTimeout(() => setShakeButton(false), 500); // duration should match the CSS animation
       if (state.status === "user_exists") {
         toast.error("Account already exists");
       } else if (state.status === "failed") {
