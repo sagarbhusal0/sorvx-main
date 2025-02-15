@@ -2,31 +2,34 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AuthForm } from "@/components/custom/auth-form";
 import { SubmitButton } from "@/components/custom/submit-button";
 
 import { login, LoginActionState } from "../actions";
+import { useActionState } from "@/hooks/use-action-state"; // adjust the import as needed
 
 export default function Page() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
+  const [shakeButton, setShakeButton] = useState(false);
 
-  const [state, formAction] = useActionState<LoginActionState, FormData>(
-    login,
-    {
-      status: "idle",
-    },
-  );
+  const [state, formAction] = useActionState<LoginActionState, FormData>(login, {
+    status: "idle",
+  });
 
   useEffect(() => {
-    if (state.status === "failed") {
-      toast.error("Invalid credentials!");
-    } else if (state.status === "invalid_data") {
-      toast.error("Failed validating your submission!");
+    if (state.status === "failed" || state.status === "invalid_data") {
+      setShakeButton(true);
+      setTimeout(() => setShakeButton(false), 500); // duration should match your CSS animation duration
+
+      if (state.status === "failed") {
+        toast.error("Invalid credentials!");
+      } else if (state.status === "invalid_data") {
+        toast.error("Failed validating your submission!");
+      }
     } else if (state.status === "success") {
       router.refresh();
     }
@@ -47,7 +50,9 @@ export default function Page() {
           </p>
         </div>
         <AuthForm action={handleSubmit} defaultEmail={email}>
-          <SubmitButton>Sign in</SubmitButton>
+          <SubmitButton className={shakeButton ? "animate-shake" : ""}>
+            Sign in
+          </SubmitButton>
           <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
             {"Don't have an account? "}
             <Link
