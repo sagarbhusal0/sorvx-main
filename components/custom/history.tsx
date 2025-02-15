@@ -95,7 +95,8 @@ export const History = ({ user }: { user: User | undefined }) => {
                 {/* New Chat Button */}
                 <Link href="/" className="block">
                   <Button
-                    variant="primary"
+                    // Changed variant from "primary" to "default" to match allowed types.
+                    variant="default"
                     className="w-full flex items-center justify-center gap-2 rounded-lg py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                   >
                     <PlusIcon className="h-5 w-5" />
