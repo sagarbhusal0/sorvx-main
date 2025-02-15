@@ -1,10 +1,11 @@
+// components/AuthForm.tsx
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Eye, EyeOff } from "lucide-react";
 
 interface AuthFormProps {
-  action: (data: FormData) => void; // expects FormData
+  action: (data: FormData) => void;
   children: React.ReactNode;
   defaultEmail?: string;
 }
@@ -12,7 +13,7 @@ interface AuthFormProps {
 export function AuthForm({ action, children, defaultEmail = "" }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
-  // Wrap the provided action with an event handler that converts the event to FormData
+  // Wrap the provided action with our event handler that converts the event into FormData.
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -22,10 +23,7 @@ export function AuthForm({ action, children, defaultEmail = "" }: AuthFormProps)
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-4 sm:px-16">
       <div className="flex flex-col gap-2">
-        <Label
-          htmlFor="email"
-          className="text-zinc-600 font-normal dark:text-zinc-400"
-        >
+        <Label htmlFor="email" className="text-zinc-600 font-normal dark:text-zinc-400">
           Email Address
         </Label>
         <Input
@@ -39,10 +37,7 @@ export function AuthForm({ action, children, defaultEmail = "" }: AuthFormProps)
           defaultValue={defaultEmail}
           aria-label="Email Address"
         />
-        <Label
-          htmlFor="password"
-          className="text-zinc-600 font-normal dark:text-zinc-400"
-        >
+        <Label htmlFor="password" className="text-zinc-600 font-normal dark:text-zinc-400">
           Password
         </Label>
         <div className="relative">
