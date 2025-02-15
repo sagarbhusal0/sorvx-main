@@ -61,7 +61,7 @@ export default function Page() {
           </p>
         </div>
         <AuthForm action={handleSubmit} defaultEmail={email}>
-          <SubmitButton className={shakeButton ? "animate-shake" : ""}>
+          <SubmitButton>
             Sign Up
           </SubmitButton>
           <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
