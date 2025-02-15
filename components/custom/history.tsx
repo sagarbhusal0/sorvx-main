@@ -115,12 +115,13 @@ export const History = ({ user }: { user: User | undefined }) => {
                               ? "bg-gray-200 dark:bg-gray-700"
                               : "hover:bg-gray-100 dark:hover:bg-gray-800"
                           }`}
-                        >
-                          <span className="truncate">
-                            {typeof chat.messages?.[0]?.content === "string"
-                              ? chat.messages[0].content.slice(0, 30)
-                              : chat.messages[0]?.content?.fileName || "File upload or scan result"}
-                          </span>
+                        ><span>
+  {typeof chat.messages[0]?.content === "object" && chat.messages[0]?.content !== null
+    ? (chat.messages[0]?.content as { fileName?: string })?.fileName || "File upload or scan result"
+    : typeof chat.messages[0]?.content === "string"
+    ? chat.messages[0]?.content.slice(0, 30)
+    : "File upload or scan result"}
+</span>
                         </Button>
                       </Link>
                       <Button
