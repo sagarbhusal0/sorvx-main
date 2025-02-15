@@ -35,24 +35,13 @@ export function Chat({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Fixed Header 
-      <header className="fixed top-0 left-0 w-full shadow-md p-2 sm:p-4 z-20">
-        <h1 className="text-base sm:text-lg font-bold">Sorvx AI
-</h1>
-      </header>*/}
-
       {/* Main Container */}
-      {/* 
-          pt-14 (56px) for mobile and pt-16 (64px) for larger screens
-          These values should roughly match the header’s height so content starts right below it.
-      */}
-      <main className="pt-14 sm:pt-16 pb-4">
-        <div className="flex flex-col items-center px-2 sm:px-4">
+      <main className="h-screen pt-14 sm:pt-16 pb-4">
+        <div className="flex flex-col h-full items-center px-2 sm:px-4">
           {/* Messages Container */}
-          {/* h-[calc(100vh-64px)] ensures the container fills the viewport minus the header height */}
           <div
             ref={messagesContainerRef}
-            className="flex flex-col gap-2 w-full max-w-md h-[calc(100vh-64px)] overflow-y-auto"
+            className="flex flex-col gap-2 w-full max-w-md flex-grow overflow-y-auto"
           >
             {messages.length === 0 && <Overview />}
 
