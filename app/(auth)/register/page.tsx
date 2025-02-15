@@ -19,7 +19,8 @@ export default function Page() {
   // Inline action logic instead of using an external hook
   const formAction = async (formData: FormData) => {
     try {
-      const result = await register(formData);
+      // Pass an empty object as the second argument
+      const result = await register(formData, {});
       setState(result);
     } catch (error) {
       console.error("Action failed:", error);
