@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import { AuthForm } from "@/components/custom/auth-form";
 import { SubmitButton } from "@/components/custom/submit-button";
-
 import { register, RegisterActionState } from "../actions";
 
 export default function Page() {
@@ -16,15 +15,13 @@ export default function Page() {
   const [state, setState] = useState<RegisterActionState>({ status: "idle" });
   const [shakeButton, setShakeButton] = useState(false);
 
-  // Inline action logic instead of using an external hook
+  // Inline action logic: pass the current state as the first argument, and formData as the second.
   const formAction = async (formData: FormData) => {
     try {
-      // Pass an empty object as the second argument
-      const result = await register(formData, {});
+      const result = await register(state, formData);
       setState(result);
     } catch (error) {
       console.error("Action failed:", error);
-      // Optionally update state to reflect error status if needed.
     }
   };
 
@@ -35,7 +32,7 @@ export default function Page() {
       state.status === "invalid_data"
     ) {
       setShakeButton(true);
-      setTimeout(() => setShakeButton(false), 500); // duration should match the CSS animation
+      setTimeout(() => setShakeButton(false), 500); // Duration should match your CSS animation
       if (state.status === "user_exists") {
         toast.error("Account already exists");
       } else if (state.status === "failed") {
