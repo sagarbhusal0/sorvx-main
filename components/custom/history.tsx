@@ -58,7 +58,7 @@ export const History = ({ user }: { user: User | undefined }) => {
       success: () => {
         mutate((history) => {
           if (history) {
-            return history.filter((h) => h.id !== id);
+            return history.filter((h) => h.id !== deleteId);
           }
           return history;
         });
@@ -77,49 +77,65 @@ export const History = ({ user }: { user: User | undefined }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="hover:bg-accent/50 transition-colors"
+            className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
           >
-            <HistoryIcon />
+            <HistoryIcon className="h-6 w-6" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px] p-0">
-          <SheetHeader className="p-4 border-b">
-            <SheetTitle className="text-lg font-medium">History</SheetTitle>
+        <SheetContent
+          side="left"
+          className="w-[300px] sm:w-[350px] p-0 bg-white dark:bg-gray-900 shadow-lg"
+        >
+          <SheetHeader className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <SheetTitle className="text-lg font-semibold">Chat History</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col h-full overflow-hidden">
-            <div className="flex-1 overflow-y-auto history-scrollbar">
-              <div className="flex flex-col gap-1 p-2">
-                <Link href="/" className="w-full">
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-4 space-y-2">
+                {/* New Chat Button */}
+                <Link href="/" className="block">
                   <Button
-                    variant="ghost"
-                    className="flex flex-row items-center gap-2 w-full justify-start hover:bg-accent/50 transition-colors rounded-lg p-3"
+                    variant="primary"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                   >
-                    <PlusIcon />
+                    <PlusIcon className="h-5 w-5" />
                     <span>New Chat</span>
                   </Button>
                 </Link>
-                {(history || []).map((chat) => (
-                  <div key={chat.id} className="group history-item">
-                    <Link href={`/chat/${chat.id}`} className="flex-1">
-                      <Button variant="ghost" className="history-button w-full">
-                        {(chat.messages[0]?.content as string)?.slice(0, 30) ||
-                          "New Chat"}
+                {/* Chat History List */}
+                <div className="mt-4 space-y-1">
+                  {(history || []).map((chat) => (
+                    <div key={chat.id} className="group relative">
+                      <Link href={`/chat/${chat.id}`} className="block">
+                        <Button
+                          variant={chat.id === id ? "secondary" : "ghost"}
+                          className={`w-full text-left flex items-center justify-between rounded-lg p-3 transition-colors ${
+                            chat.id === id
+                              ? "bg-gray-200 dark:bg-gray-700"
+                              : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                          }`}
+                        >
+                          <span className="truncate">
+                            {typeof chat.messages?.[0]?.content === "string"
+                              ? chat.messages[0].content.slice(0, 30)
+                              : chat.messages[0]?.content?.fileName || "File upload or scan result"}
+                          </span>
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => {
+                          setDeleteId(chat.id);
+                          setShowDeleteDialog(true);
+                        }}
+                      >
+                        <DeleteIcon className="h-4 w-4 text-red-500" />
                       </Button>
-                    </Link>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="history-delete-button"
-                      onClick={() => {
-                        setDeleteId(chat.id);
-                        setShowDeleteDialog(true);
-                      }}
-                    >
-                      {/* Either change to "size-4" or disable the rule */}
-                      <DeleteIcon className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -131,15 +147,14 @@ export const History = ({ user }: { user: User | undefined }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Chat</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this chat? This action cannot be
-              undone.
+              Are you sure you want to delete this chat? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-red-600 text-white hover:bg-red-700"
             >
               Delete
             </AlertDialogAction>
