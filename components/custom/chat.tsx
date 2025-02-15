@@ -35,11 +35,11 @@ export function Chat({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Fixed Header */}
+      {/* Fixed Header 
       <header className="fixed top-0 left-0 w-full shadow-md p-2 sm:p-4 z-20">
         <h1 className="text-base sm:text-lg font-bold">Sorvx AI
 </h1>
-      </header>
+      </header>*/}
 
       {/* Main Container */}
       {/* 
