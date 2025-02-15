@@ -14,17 +14,20 @@ const CodeBlock = ({
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    const codeText = children.join("");
-    
+    const codeText = Array.isArray(children) ? children.join("") : children;
+
     // Use the Clipboard API if available and in a secure context.
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(codeText).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      }).catch((err) => {
-        console.error("Clipboard API failed, falling back to execCommand", err);
-        fallbackCopyText(codeText);
-      });
+      navigator.clipboard
+        .writeText(codeText)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch((err) => {
+          console.error("Clipboard API failed, falling back to execCommand", err);
+          fallbackCopyText(codeText);
+        });
     } else {
       // Fallback for mobile or insecure contexts.
       fallbackCopyText(codeText);
