@@ -15,7 +15,7 @@ export default function Page() {
   const [state, setState] = useState<LoginActionState>({ status: "idle" });
   const [shakeButton, setShakeButton] = useState(false);
 
-  // Inline action logic: pass the current state as the first argument, and formData as the second.
+  // Inline action logic: pass current state as first argument, formData as second.
   const formAction = async (formData: FormData) => {
     try {
       const result = await login(state, formData);
@@ -28,7 +28,7 @@ export default function Page() {
   useEffect(() => {
     if (state.status === "failed" || state.status === "invalid_data") {
       setShakeButton(true);
-      setTimeout(() => setShakeButton(false), 500); // Duration should match your CSS animation
+      setTimeout(() => setShakeButton(false), 500);
       if (state.status === "failed") {
         toast.error("Invalid credentials!");
       } else if (state.status === "invalid_data") {
